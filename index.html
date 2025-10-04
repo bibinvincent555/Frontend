@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Project — Exact Match</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      /* Local font */
+      @font-face { font-family: 'FieldGothic'; src: url('./Field_Gothic_No.75_Bold_Wide_dce5b3a3-317d-44ba-8542-f1eae80c511c%20(1)%20(1)%20(3).otf') format('opentype'); font-weight:700; font-style:normal; font-display:swap; }
+
+      /* Normalize */
+      *{box-sizing:border-box;margin:0;padding:0}
+      html,body{height:100%}
+
+      :root{--accent:#ff6b35; --accent-deep:#ff4d00; --muted:#f8efe9; --radius:18px}
+
+      body{font-family:'FieldGothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; color:#222; overflow-x:hidden; background:#fef8f5}
+
+      /* Top-area background will be applied to .hero-bg-card so only that region shows the image */
+      .hero-bg-card{
+        background-image: url('./images/Group%20831.webp');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center top;
+        border-radius: 18px;
+        border: 4px solid var(--accent-deep); /* red border */
+        padding: 6px; /* minimal space between border and content */
+        box-shadow: 0 14px 40px rgba(0,0,0,0.08);
+        margin: 6px auto; /* very small gap from window top */
+        max-width: 1200px;
+      }
+
+      /* Promo bar */
+      .promo-bar{background:linear-gradient(135deg,var(--accent) 0%, #ff8556 100%); color:#fff; text-align:center; padding:12px 8px; font-weight:800; letter-spacing:1px}
+
+      /* Header / nav */
+      .navbar{background:transparent;padding:18px 0;position:relative;z-index:100}
+      .nav-container{display:flex;justify-content:space-between;align-items:center;max-width:1400px;margin:0 auto;padding:0 24px}
+      .nav-left{display:flex;gap:22px;background:#fff;padding:10px 22px;border-radius:50px;box-shadow:0 6px 24px rgba(0,0,0,0.06);align-items:center}
+      .nav-left a{color:#333;text-decoration:none;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:0.5px}
+      .nav-left a:hover{color:var(--accent-deep)}
+      .logo{font-size:28px;font-weight:800;color:var(--accent-deep);letter-spacing:6px;text-transform:uppercase}
+      .nav-right{display:flex;gap:14px;align-items:center}
+      .nav-btn{padding:10px 18px;border-radius:50px;border:2px solid #333;background:#fff;font-weight:700;cursor:pointer}
+      .nav-btn:hover{background:#333;color:#fff;transform:translateY(-2px)}
+      .cart-badge{background:var(--accent);color:#fff;border-radius:50%;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;margin-left:8px}
+
+      /* Hero */
+      .hero-outer{padding:28px}
+      .hero-card{background:#fff;border-radius:24px;box-shadow:0 10px 40px rgba(0,0,0,0.08);overflow:hidden;display:flex;align-items:center;gap:32px;padding:32px;border:4px solid rgba(255,77,0,0.04)}
+      .hero-content{flex:1;max-width:680px}
+      .hero-eyebrow{font-size:12px;color:#b86f4f;margin-bottom:12px;font-weight:700}
+      .hero-title{color:var(--accent-deep);font-size:clamp(36px,9vw,90px);line-height:0.95;font-weight:900;text-transform:uppercase;margin:0}
+      .hero-cta{margin-top:18px}
+      .hero-cta .btn{border-radius:999px;padding:12px 26px;font-weight:800}
+      .hero-image{flex:0 0 360px;height:360px;background-image:url('./1000085526.jpg');background-position:center right;background-size:cover;border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,0.12)}
+
+      /* Categories */
+    .categories{display:flex;gap:18px;margin-top:18px}
+  /* Make the category container a fixed-height card and hide overflow so the image perfectly fits the tile */
+  .cat{background:var(--muted);border-radius:14px;overflow:hidden;flex:1;position:relative;padding:0}
+    /* Keep the image height exact and block-level so text overlays it correctly */
+  /* Make the image fill the .cat area exactly while preserving aspect ratio */
+  .cat img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block;border-radius:0}
+  /* Category label (bold) — positioned over the image, left side */
+  .cat .cat-label{position:absolute;left:12px;top:48px;font-weight:900;color:#fff;margin:0;padding:0;text-transform:uppercase;letter-spacing:1px;text-shadow:0 3px 8px rgba(0,0,0,0.6)}
+  /* SHOP text (not bold) — positioned over the image above the label */
+  .badge-cat{position:absolute;left:12px;top:12px;color:#fff;background:transparent;padding:0;font-weight:400;font-size:13px;letter-spacing:1px;text-shadow:0 2px 6px rgba(0,0,0,0.6)}
+
+  /* Larger swatches area: increase swatch circle size and ensure images fit */
+  .swatch{width:100px;height:100px;border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,0.06)}
+  .swatches .swatch img{width:100px!important;height:100px!important;border-radius:10px;object-fit:cover!important}
+
+      .highlight-strip{background:var(--accent-deep);color:#fff;padding:14px;text-align:center;font-weight:800;letter-spacing:1px;margin:32px 0}
+
+      /* Product rows */
+      .products-row{display:flex;gap:18px;overflow:hidden}
+      .product{background:#fff;border-radius:18px;padding:14px;width:220px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+      .product img{width:100%;height:160px;object-fit:cover;border-radius:12px}
+      .product .title{font-weight:800;margin-top:8px;font-size:14px}
+
+      .swatches{display:flex;gap:36px;justify-content:center;margin:40px 0}
+      .swatch{width:84px;height:84px;border-radius:999px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,0.06)}
+
+      .featured{display:flex;gap:24px;align-items:center;margin:36px 0}
+      .featured img{width:420px;height:320px;object-fit:cover;border-radius:18px}
+      .featured .meta{flex:1}
+
+      .brands-strip{display:flex;justify-content:center;gap:22px;padding:20px 0}
+
+      .kits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}
+      .kit{background:#fff;padding:18px;border-radius:16px;text-align:center;box-shadow:0 8px 20px rgba(0,0,0,0.06)}
+
+      .inclusivity{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:center;margin:48px 0}
+      .inclusivity .image{background-image:url('./images/Placement_Area1.png');background-size:cover;background-position:center;height:320px;border-radius:12px}
+      .inclusivity .text{background:#fff;border-radius:12px;padding:36px;border-left:8px solid var(--accent-deep)}
+
+      .ig-strip{display:flex;gap:12px;overflow:auto;padding:12px 0}
+      .ig-strip img{width:120px;height:160px;object-fit:cover;border-radius:12px}
+
+      footer{background:#fff;padding:48px 28px}
+      .vip{background:var(--accent-deep);color:#fff;padding:24px;border-radius:12px;display:flex;gap:12px;align-items:center}
+
+      /* Animations */
+      @keyframes slideInLeft{from{opacity:0;transform:translateX(-50px)}to{opacity:1;transform:translateX(0)}}
+      @keyframes fadeInScale{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
+      @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+
+      /* Responsive */
+      @media(max-width:992px){
+        .hero-card{flex-direction:column;align-items:flex-start}
+        .hero-image{width:100%;height:320px}
+        .featured{flex-direction:column}
+        .inclusivity{grid-template-columns:1fr}
+      }
+      @media(max-width:576px){
+        .nav-container{flex-direction:column;gap:14px}
+        .nav-left{flex-direction:row;gap:14px}
+        .logo{font-size:20px}
+        .hero-title{font-size:clamp(28px,10vw,48px)}
+      }
+      /* Disable fixed background on small screens for performance */
+      @media (max-width: 768px) { body { background-attachment: scroll; } }
+    </style>
+  </head>
+  <body>
+
+    <div class="hero-bg-card">
+
+     <div class="promo-bar">
+        FREE UK SHIPPING ON ORDERS OVER £40
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="#shop">SHOP</a>
+                <a href="#about">ABOUT</a>
+                <a href="#learn">LEARN</a>
+            </div>
+            <div class="logo">PROJECT</div>
+            <div class="nav-right">
+                <button class="nav-btn">SEARCH</button>
+                <button class="nav-btn">CART <span class="cart-badge">0</span></button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container hero-outer">
+       <section class="hero-section">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    BIG LIPS,<br>
+                    BIGGER ENERGY
+                </h1>
+                <p class="hero-subtitle">
+                    Our famous lip liner lines, fills and plumps so you can cheat your way to an instant lip lift.
+                </p>
+                <a href="#shop" class="cta-button">SHOP PLUMP & FILL</a>
+            </div>
+           
+        </div>
+     </section>
+
+   </div> <!-- /.hero-bg-card -->
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Cart functionality
+        let cartCount = 0;
+        const cartBadge = document.querySelector('.cart-badge');
+        const ctaButton = document.querySelector('.cta-button');
+
+        ctaButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            cartCount++;
+            cartBadge.textContent = cartCount;
+            cartBadge.style.animation = 'none';
+            setTimeout(() => {
+                cartBadge.style.animation = 'float 0.5s ease-in-out';
+            }, 10);
+        });
+
+        // Parallax effect on scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const heroImage = document.querySelector('.hero-image');
+            if (heroImage) {
+                heroImage.style.transform = `translateY(${scrolled * 0.3}px)`;
+            }
+        });
+    </script>
+
+
+      <div class="categories mt-3">
+        <div class="cat">
+          <div class="badge-cat">SHOP</div>
+          <div class="cat-label">LIP</div>
+          <img src="./images/Placement_Area1.png" alt="lip">
+        </div>
+        <div class="cat">
+          <div class="badge-cat">SHOP</div>
+          <div class="cat-label">FACE</div>
+          <img src="./images/Placement_Area2.webp" alt="face">
+        </div>
+        <div class="cat">
+          <div class="badge-cat">SHOP</div>
+          <div class="cat-label">KITS</div>
+          <img src="./images/Placement_Area_2a5a1a48-51cc-4dd2-a552-a28c0f88da9f.webp" alt="kits">
+        </div>
+      </div>
+
+      <div class="highlight-strip">CLINICALLY PROVEN TO PLUMP · 100% NATURAL · VEGAN · CRUELTY FREE</div>
+
+      <section>
+        <h3 style="color:var(--accent); font-weight:900;">BEST IN PLUMP</h3>
+        <div class="products-row mt-3">
+          <div class="product">
+            <img src="./images/Placement_Area_ad738f53-e512-46e8-bd01-ff49708c6eb2.png" alt="product1">
+            <div class="title">JUICY LIP OIL<br><small style="color:#b86f4f">$24.00</small></div>
+          </div>
+          <div class="product">
+            <img src="./images/Placement_Area_c1acb99c-eeac-4c52-9b62-a4b565a06160.png" alt="product2">
+            <div class="title">HYDRA PLUMP<br><small style="color:#b86f4f">$22.00</small></div>
+          </div>
+          <div class="product">
+            <img src="./images/Placement_Area_ad738f53-e512-46e8-bd01-ff49708c6eb2.png" alt="product3">
+            <div class="title">PLUMP GLOSS<br><small style="color:#b86f4f">$18.00</small></div>
+          </div>
+          <div class="product">
+            <img src="./images/Placement_Area_c1acb99c-eeac-4c52-9b62-a4b565a06160.png" alt="product4">
+            <div class="title">LIP BOOST<br><small style="color:#b86f4f">$20.00</small></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="swatches">
+        <div class="swatch"><img src="./images/Rectangle%2081.webp" style="width:70px; height:70px; border-radius:10px; object-fit:cover"></div>
+        <div class="swatch"><img src="./images/Placement_Area2.webp" style="width:70px; height:70px; border-radius:10px; object-fit:cover"></div>
+        <div class="swatch"><img src="./images/Placement_Area1.png" style="width:70px; height:70px; border-radius:10px; object-fit:cover"></div>
+        <div class="swatch"><img src="./images/Group%20831.webp" style="width:70px; height:70px; border-radius:10px; object-fit:cover"></div>
+      </div>
+
+      <div class="featured">
+        <img src="./images/Group%20831.webp" alt="featured">
+        <div class="meta">
+          <h4 style="color:var(--accent); font-weight:900">YOUR LIPS BUT JUICIER</h4>
+          <p style="color:#6b4a3f">A mirror-shine, visible-plump formula that looks like you — only juicier. Lightweight and non-sticky.</p>
+          <button class="btn btn-outline-secondary">Shop Plump</button>
+        </div>
+      </div>
+
+      <div class="brands-strip text-center my-4">
+        <img src="./images/project-logo-wordmark-orangeHi-Res.png" style="height:26px; opacity:0.9; margin-right:22px">
+        <img src="./images/project-logo-wordmark-orangeHi-Res.png" style="height:26px; opacity:0.9; margin-right:22px">
+        <img src="./images/project-logo-wordmark-orangeHi-Res.png" style="height:26px; opacity:0.9">
+      </div>
+
+      <section>
+        <h3 style="color:var(--accent); font-weight:900;">PLUMPING KITS</h3>
+        <div class="kits-grid mt-3">
+          <div class="kit">
+            <img src="./images/Placement_Area_ad738f53-e512-46e8-bd01-ff49708c6eb2.png" style="width:100%; height:180px; object-fit:cover; border-radius:12px">
+            <div style="margin-top:12px; font-weight:800">THE KICKSTARTER<br><small style="color:#b86f4f">$39.99</small></div>
+          </div>
+          <div class="kit">
+            <img src="./images/Placement_Area_c1acb99c-eeac-4c52-9b62-a4b565a06160.png" style="width:100%; height:180px; object-fit:cover; border-radius:12px">
+            <div style="margin-top:12px; font-weight:800">FULL SET<br><small style="color:#b86f4f">$49.99</small></div>
+          </div>
+          <div class="kit">
+            <img src="./images/Rectangle%2081.webp" style="width:100%; height:180px; object-fit:cover; border-radius:12px">
+            <div style="margin-top:12px; font-weight:800">PLUMP TRIO<br><small style="color:#b86f4f">$59.99</small></div>
+          </div>
+          <div class="kit">
+            <img src="./images/Group%20831.webp" style="width:100%; height:180px; object-fit:cover; border-radius:12px">
+            <div style="margin-top:12px; font-weight:800">GLOSS &AMP; CARE<br><small style="color:#b86f4f">$29.99</small></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="inclusivity mt-4">
+        <div class="image"></div>
+        <div class="text">
+          <h3 style="color:var(--accent); font-weight:900">MADE TO PLUMP, MADE FOR EVERYONE</h3>
+          <p style="color:#6b4a3f">Confidence has no limits. Our products are developed and tested on all skin tones and lip types.</p>
+          <button class="btn btn-outline-secondary">Learn More</button>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="color:var(--accent); font-weight:900">@PROJECT_COSMETICS</h3>
+        <div class="ig-strip mt-2">
+          <img src="./images/Group%20831.webp">
+          <img src="./images/Placement_Area1.png">
+          <img src="./images/Placement_Area2.webp">
+          <img src="./images/Placement_Area_ad738f53-e512-46e8-bd01-ff49708c6eb2.png">
+          <img src="./images/Placement_Area_c1acb99c-eeac-4c52-9b62-a4b565a06160.png">
+        </div>
+      </div>
+
+      <div class="vip mt-5">
+        <div style="flex:1">
+          <h4 style="margin:0; font-weight:900">GET ON THE VIP LIST</h4>
+          <p style="margin:0">Subscribe to get special offers and updates.</p>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center">
+          <input type="email" placeholder="Enter your email" style="padding:10px 14px; border-radius:999px; border:none; width:320px">
+          <button class="btn btn-dark" style="border-radius:999px">Subscribe</button>
+        </div>
+      </div>
+
+    </main>
+
+    <footer class="mt-5 text-center">
+      <small style="color:#b86f4f">© Project Cosmetics</small>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
